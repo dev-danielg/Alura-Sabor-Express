@@ -48,17 +48,13 @@ def menu_de_opcoes(mensagem, *opcoes):
     return
 
 
-def pausa():
-    sleep(1.5)
-
-
 def limpar_console():
     system('cls')
 
 
 def finalizar_programa():
     print('Saindo do programa...')
-    pausa()
+    sleep(1.5)
     limpar_console()
     print('Programa finalizado com sucesso.')
     exit(0)
@@ -86,16 +82,18 @@ def cadastrar_restaurante():
                 return pergunta
 
 
-    def atualizar_informacao():
-        while True:
-            subtitulo(msg_subtitulo)
-            numero_informacao = menu_de_opcoes('Digite o número da informação a ser alterada', 'Nome')
-            if numero_informacao == 1:
-                nome_novo = cadastrar_nome_do_restaurante()
-                input_continuar(f'Nome alterado de ({restaurante.nome}) para ({nome_novo}) com sucesso.')
-                restaurante.nome = nome_novo
-                break
-
+    def atualizar_informacao(restaurante):
+        subtitulo(msg_subtitulo)
+        numero_informacao = menu_de_opcoes('Digite o número da informação a ser alterada', 'Nome', 'Categoria')
+        if numero_informacao == 1:
+            nome_novo = cadastrar_nome_do_restaurante()
+            input_continuar(f'Nome alterado de ({restaurante.nome}) para ({nome_novo}) com sucesso.')
+            restaurante.nome = nome_novo
+        elif numero_informacao == 2:
+            categoria_nova = cadastrar_categoria()
+            input_continuar(f'Categoria alterada de ({restaurante.categoria}) para ({categoria_nova}) com sucesso.')
+            restaurante.categoria = categoria_nova
+                
 
     def listar_informacoes():
         for indice, (key, value) in enumerate(restaurante.get_dict_info().items(), start=1):
@@ -114,12 +112,23 @@ def cadastrar_restaurante():
                 else:
                     return nome
                 
+                
+    def cadastrar_categoria():
+        while True:
+            subtitulo(msg_subtitulo)
+            categoria = input('Digite a categoria do restaurante: ').strip()
+            if not categoria:
+                input_continuar('Por favor, não deixe o espaço em branco.')
+            else:
+                return categoria
+        
+                
              
-    restaurante = Restaurante(nome=cadastrar_nome_do_restaurante())
+    restaurante = Restaurante(nome=cadastrar_nome_do_restaurante(), categoria=cadastrar_categoria())
     while True:
         pergunta = pergunta_informacoes()
         if pergunta == 'S':
-            atualizar_informacao()
+            atualizar_informacao(restaurante)
         elif pergunta == 'N':
             subtitulo(msg_subtitulo)
             Restaurante.adicionar(restaurante)
@@ -132,8 +141,10 @@ def listar_restaurantes():
     subtitulo(msg_subtitulo)
     restaurantes = Restaurante.listar_restaurantes()
     if restaurantes:
-        for indice, value in enumerate(restaurantes, start=1):
-            print(f'{indice}. {value['nome']}')
+        for value in restaurantes:
+            print(f'''Nome: {value['nome']}
+Categoria: {value['categoria']}''')
+            print('-' * 50)
         input_continuar()
     else:
         input_continuar('Ainda não há restaurantes cadastrados.')

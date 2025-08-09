@@ -1,19 +1,22 @@
 class Restaurante:
     nome: str
+    categoria: str
     estado: str
     restaurantes_cadastrados = []
     
     
-    def __init__(self, nome):
+    def __init__(self, nome, categoria):
         self.nome = nome
+        self.categoria = categoria
         self.estado = 'Desativado'
     
     
     def get_dict_info(self):
-        return {'nome': self.nome}
+        return {key: value for key, value in vars(self).items() if key != 'estado'}
+    
     
     def get_dict_all(self):
-        vars(self)
+        return vars(self)
     
     
     def is_activated(self):
@@ -35,3 +38,4 @@ class Restaurante:
     @classmethod
     def adicionar(cls, restaurante):
         cls.restaurantes_cadastrados.append(restaurante.get_dict_all())
+ 
