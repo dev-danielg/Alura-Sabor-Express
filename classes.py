@@ -5,10 +5,10 @@ class Restaurante:
     restaurantes_cadastrados = []
     
     
-    def __init__(self, nome, categoria):
+    def __init__(self, nome, categoria, estado='Desativado'):
         self.nome = nome
         self.categoria = categoria
-        self.estado = 'Desativado'
+        self.estado = estado
     
     
     def get_dict_info(self):
@@ -31,10 +31,15 @@ class Restaurante:
     def desativar(self):
         if self.is_activated:
             self.estado = 'Desativado'
+            
+            
+    @classmethod
+    def atualizar_estado(cls, escolha, novo_estado):
+        cls.restaurantes_cadastrados[escolha - 1]['estado'] = novo_estado
     
     
     @classmethod
-    def listar_restaurantes(cls):
+    def retornar_lista(cls):
         return cls.restaurantes_cadastrados
     
     

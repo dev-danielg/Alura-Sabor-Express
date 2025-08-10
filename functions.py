@@ -11,12 +11,11 @@ def main():
         if resposta_do_usuario == 1:
             cadastrar_restaurante()
         elif resposta_do_usuario == 2:
-            listar_restaurantes()
+            lista_de_restaurantes()
         elif resposta_do_usuario == 3:
-            ativar_restaurante()
+            alternar_estado_restaurante()
         elif resposta_do_usuario == 4:
             finalizar_programa()
-            break
 
 
 def titulo(mensagem, linha='-', quantidade_de_espacos=50):
@@ -67,7 +66,7 @@ def subtitulo(mensagem):
 
 def cadastrar_restaurante():
     msg_subtitulo = 'Cadastrar restaurante'
-    restaurantes = Restaurante.listar_restaurantes()
+    restaurantes = Restaurante.retornar_lista()
 
     
     def pergunta_informacoes():
@@ -98,7 +97,7 @@ def cadastrar_restaurante():
         for indice, (key, value) in enumerate(restaurante.get_dict_info().items(), start=1):
             print(f'{indice}. {key.title()}: {value} ')
   
-                
+
     def cadastrar_nome_do_restaurante():
         while True:
             subtitulo(msg_subtitulo)
@@ -135,25 +134,55 @@ def cadastrar_restaurante():
         elif pergunta == 'N':
             subtitulo(msg_subtitulo)
             Restaurante.adicionar(restaurante)
-            input_continuar(f'O cadastro do restaurante ({restaurante.nome}) foi concluido com sucesso!')
+            input_continuar(f'O cadastro do restaurante ({restaurante.nome}) foi concluido com sucesso.')
             main()
-
-
+            
+            
 def listar_restaurantes():
-    msg_subtitulo = 'Lista de restaurantes'
-    subtitulo(msg_subtitulo)
-    restaurantes = Restaurante.listar_restaurantes()
-    restaurantes_ativos = [restaurante for restaurante in restaurantes if restaurante['estado'] == 'Ativado'] if restaurantes else []
-    if restaurantes_ativos:
-        for value in restaurantes_ativos:
-            print(f'''Nome: {value['nome']}
-Categoria: {value['categoria']}''')
-            print('-' * 50)
+    restaurantes = Restaurante.retornar_lista()
+    if restaurantes:
+        for indice, restaurante in enumerate(restaurantes, start=1):
+            print(f'''{indice}. {restaurante['nome']}
+   Categoria: {restaurante['categoria']}
+   Estado: {restaurante['estado']}
+{'-' * 50}''')
         input_continuar()
     else:
-        input_continuar('Ainda não há restaurantes ativos.')
+        input_continuar('Não há restaurantes cadastrados no sistema.')
+
+
+def lista_de_restaurantes():
+    msg_subtitulo = 'Lista de restaurantes'
+    subtitulo(msg_subtitulo)
+    listar_restaurantes()
     main()
 
 
-def ativar_restaurante():
-    pass
+def alternar_estado_restaurante():
+    msg_subtitulo = 'Ativar/Desativar restaurantes'
+    while True:
+        subtitulo(msg_subtitulo)
+        restaurantes = Restaurante.retornar_lista()
+        listar_restaurantes()
+        if restaurantes:
+            escolha = input('Deseja ativar ou desativar qual restaurante?\n').strip()
+            if escolha.isdigit():
+                escolha = int(escolha)
+                if 1 <= escolha <= len(restaurantes):
+                    restaurante_escolhido = restaurantes[escolha - 1]
+                    restaurante = Restaurante(nome=restaurante_escolhido['nome'], 
+                                            categoria=restaurante_escolhido['categoria'], 
+                                            estado=restaurante_escolhido['estado'])
+                    if restaurante.is_activated():
+                        restaurante.desativar()
+                    else:
+                        restaurante.ativar()
+                    Restaurante.atualizar_estado(escolha, restaurante.estado)
+                    input_continuar(f'Restaurante ({restaurante.nome}) {restaurante.estado.lower()} com sucesso.')
+                    main()
+                else:
+                    input_continuar(f'Por favor, digite um número inteiro entre 1 e {len(restaurantes)}')
+            else:
+                input_continuar('Por favor, digite um número inteiro válido.')
+        else:
+            main()
