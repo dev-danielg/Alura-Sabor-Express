@@ -26,8 +26,11 @@ class Restaurante:
     def ativar(self):
         if not self.is_activated():
             self.estado = 'Ativado'
-        else: 
-            pass
+            
+        
+    def desativar(self):
+        if self.is_activated:
+            self.estado = 'Desativado'
     
     
     @classmethod

@@ -125,8 +125,8 @@ def cadastrar_restaurante():
                 input_continuar('Por favor, não deixe o espaço em branco.')
             else:
                 return categoria
-                
-             
+                  
+    
     restaurante = Restaurante(nome=cadastrar_nome_do_restaurante(), categoria=cadastrar_categoria())
     while True:
         pergunta = pergunta_informacoes()
@@ -143,14 +143,15 @@ def listar_restaurantes():
     msg_subtitulo = 'Lista de restaurantes'
     subtitulo(msg_subtitulo)
     restaurantes = Restaurante.listar_restaurantes()
-    if restaurantes:
-        for value in restaurantes:
+    restaurantes_ativos = [restaurante for restaurante in restaurantes if restaurante['estado'] == 'Ativado'] if restaurantes else []
+    if restaurantes_ativos:
+        for value in restaurantes_ativos:
             print(f'''Nome: {value['nome']}
 Categoria: {value['categoria']}''')
             print('-' * 50)
         input_continuar()
     else:
-        input_continuar('Ainda não há restaurantes cadastrados.')
+        input_continuar('Ainda não há restaurantes ativos.')
     main()
 
 
