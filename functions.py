@@ -68,7 +68,6 @@ def subtitulo(mensagem):
 def cadastrar_restaurante():
     msg_subtitulo = 'Cadastrar restaurante'
     restaurantes = Restaurante.listar_restaurantes()
-    restaurante_nomes = [restaurante['nome'].upper() for restaurante in restaurantes] if restaurantes else []
 
     
     def pergunta_informacoes():
@@ -107,11 +106,16 @@ def cadastrar_restaurante():
             if not nome:
                 input_continuar('Por favor, não deixe o espaço em branco.')
             else:
-                if nome.upper() in restaurante_nomes:
-                    input_continuar('Restaurante já cadastrado no sistema. Tente novamente.')
+                if restaurantes:
+                    for restaurante in restaurantes:
+                        if nome.upper() == restaurante['nome'].upper():
+                            input_continuar('Restaurante já cadastrado no sistema. Tente novamente.')
+                            break
+                        elif restaurante == restaurantes[-1]:
+                            return nome
                 else:
                     return nome
-                
+                        
                 
     def cadastrar_categoria():
         while True:
@@ -121,7 +125,6 @@ def cadastrar_restaurante():
                 input_continuar('Por favor, não deixe o espaço em branco.')
             else:
                 return categoria
-        
                 
              
     restaurante = Restaurante(nome=cadastrar_nome_do_restaurante(), categoria=cadastrar_categoria())
