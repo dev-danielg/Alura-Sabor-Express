@@ -173,10 +173,7 @@ def alternar_estado_restaurante():
                     restaurante = Restaurante(nome=restaurante_escolhido['nome'], 
                                             categoria=restaurante_escolhido['categoria'], 
                                             estado=restaurante_escolhido['estado'])
-                    if restaurante.is_activated():
-                        restaurante.desativar()
-                    else:
-                        restaurante.ativar()
+                    restaurante.mudar_estado()
                     Restaurante.atualizar_estado(escolha, restaurante.estado)
                     input_continuar(f'Restaurante ({restaurante.nome}) {restaurante.estado.lower()} com sucesso.')
                     main()
