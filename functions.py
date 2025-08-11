@@ -146,15 +146,15 @@ def listar_restaurantes():
    Categoria: {restaurante['categoria']}
    Estado: {restaurante['estado']}
 {'-' * 50}''')
-        input_continuar()
     else:
-        input_continuar('Não há restaurantes cadastrados no sistema.')
+        print('Não há restaurantes cadastrados no sistema.')
 
 
 def lista_de_restaurantes():
     msg_subtitulo = 'Lista de restaurantes'
     subtitulo(msg_subtitulo)
     listar_restaurantes()
+    input_continuar()
     main()
 
 
@@ -165,7 +165,7 @@ def alternar_estado_restaurante():
         restaurantes = Restaurante.retornar_lista()
         listar_restaurantes()
         if restaurantes:
-            escolha = input('Deseja ativar ou desativar qual restaurante?\n').strip()
+            escolha = input('\nDeseja ativar ou desativar qual restaurante?\n').strip()
             if escolha.isdigit():
                 escolha = int(escolha)
                 if 1 <= escolha <= len(restaurantes):
@@ -185,4 +185,5 @@ def alternar_estado_restaurante():
             else:
                 input_continuar('Por favor, digite um número inteiro válido.')
         else:
+            input_continuar()
             main()
