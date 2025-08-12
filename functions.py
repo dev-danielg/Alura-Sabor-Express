@@ -41,7 +41,7 @@ def menu_de_opcoes(mensagem, *opcoes):
             return escolha
         else:
             input_continuar(f'Escolha inválida. Digite um número inteiro entre 1 e {len(opcoes)}.')
-    elif not escolha.isdigit():
+    else:
         input_continuar('Por favor, digite um número inteiro válido.')
     limpar_console()
     return
@@ -78,7 +78,7 @@ def cadastrar_restaurante():
                 return pergunta
 
 
-    def atualizar_informacao(restaurante):
+    def atualizar_informacao():
 
         
         def atualizar_nome():
@@ -92,13 +92,14 @@ def cadastrar_restaurante():
             input_continuar(f'Categoria alterada de ({restaurante.categoria}) para ({categoria_nova}) com sucesso.')
             restaurante.categoria = categoria_nova
 
-        
-        subtitulo(msg_subtitulo)
-        numero_informacao = menu_de_opcoes('Digite o número da informação a ser alterada', 'Nome', 'Categoria')
-        if numero_informacao == 1:
-            atualizar_nome()
-        elif numero_informacao == 2:
-            atualizar_categoria()
+
+        while True:
+            subtitulo(msg_subtitulo)
+            numero_informacao = menu_de_opcoes('Digite o número da informação a ser alterada', 'Nome', 'Categoria')
+            if numero_informacao == 1:
+                atualizar_nome()
+            elif numero_informacao == 2:
+                atualizar_categoria()
     
     
     def listar_informacoes():
@@ -136,11 +137,13 @@ def cadastrar_restaurante():
     
     msg_subtitulo = 'Cadastrar restaurante'
     restaurantes = Restaurante.retornar_lista()
-    restaurante = Restaurante(nome=cadastrar_nome_do_restaurante(), categoria=cadastrar_categoria(), estado='Desativado')
+    restaurante = Restaurante(nome=cadastrar_nome_do_restaurante(), 
+                              categoria=cadastrar_categoria(), 
+                              estado='Desativado')
     while True:
         pergunta = pergunta_informacoes()
         if pergunta == 'S':
-            atualizar_informacao(restaurante)
+            atualizar_informacao()
         elif pergunta == 'N':
             subtitulo(msg_subtitulo)
             Restaurante.adicionar(restaurante)
