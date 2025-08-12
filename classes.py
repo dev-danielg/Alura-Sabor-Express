@@ -25,6 +25,19 @@ class Restaurante:
     
     def mudar_estado(self):
         self.estado = 'Desativado' if self.is_activated() else 'Ativado'
+    
+    
+    @classmethod
+    def listar_restaurantes(cls):
+        restaurantes = cls.retornar_lista()
+        if restaurantes:
+            for indice, restaurante in enumerate(restaurantes, start=1):
+                print(f'''{indice}. {restaurante['nome']}
+       Categoria: {restaurante['categoria']}
+       Estado: {restaurante['estado']}
+    {'-' * 50}''')
+        else:
+            print('Não há restaurantes cadastrados no sistema.')
             
             
     @classmethod

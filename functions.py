@@ -150,23 +150,11 @@ def cadastrar_restaurante():
             input_continuar(f'O cadastro do restaurante ({restaurante.nome}) foi concluido com sucesso.')
             main()
             
-            
-def listar_restaurantes():
-    restaurantes = Restaurante.retornar_lista()
-    if restaurantes:
-        for indice, restaurante in enumerate(restaurantes, start=1):
-            print(f'''{indice}. {restaurante['nome']}
-   Categoria: {restaurante['categoria']}
-   Estado: {restaurante['estado']}
-{'-' * 50}''')
-    else:
-        print('Não há restaurantes cadastrados no sistema.')
-
 
 def lista_de_restaurantes():
     msg_subtitulo = 'Lista de restaurantes'
     subtitulo(msg_subtitulo)
-    listar_restaurantes()
+    Restaurante.listar_restaurantes()
     input_continuar()
     main()
 
@@ -176,7 +164,7 @@ def alternar_estado_restaurante():
     while True:
         subtitulo(msg_subtitulo)
         restaurantes = Restaurante.retornar_lista()
-        listar_restaurantes()
+        Restaurante.listar_restaurantes()
         if restaurantes:
             escolha = input('\nDeseja ativar ou desativar qual restaurante?\n').strip()
             if escolha.isdigit():
