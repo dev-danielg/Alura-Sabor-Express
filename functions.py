@@ -136,7 +136,7 @@ def cadastrar_restaurante():
     
     msg_subtitulo = 'Cadastrar restaurante'
     restaurantes = Restaurante.retornar_lista()
-    restaurante = Restaurante(nome=cadastrar_nome_do_restaurante(), categoria=cadastrar_categoria())
+    restaurante = Restaurante(nome=cadastrar_nome_do_restaurante(), categoria=cadastrar_categoria(), estado='Desativado')
     while True:
         pergunta = pergunta_informacoes()
         if pergunta == 'S':

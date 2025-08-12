@@ -5,7 +5,7 @@ class Restaurante:
     restaurantes_cadastrados = []
     
     
-    def __init__(self, nome, categoria, estado='Desativado'):
+    def __init__(self, nome, categoria, estado):
         self.nome = nome
         self.categoria = categoria
         self.estado = estado
