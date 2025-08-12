@@ -65,8 +65,6 @@ def subtitulo(mensagem):
         
 
 def cadastrar_restaurante():
-    msg_subtitulo = 'Cadastrar restaurante'
-    restaurantes = Restaurante.retornar_lista()
 
     
     def pergunta_informacoes():
@@ -134,8 +132,10 @@ def cadastrar_restaurante():
                 input_continuar('Por favor, não deixe o espaço em branco.')
             else:
                 return categoria
-                  
     
+    
+    msg_subtitulo = 'Cadastrar restaurante'
+    restaurantes = Restaurante.retornar_lista()
     restaurante = Restaurante(nome=cadastrar_nome_do_restaurante(), categoria=cadastrar_categoria())
     while True:
         pergunta = pergunta_informacoes()
