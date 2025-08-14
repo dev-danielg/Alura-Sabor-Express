@@ -1,30 +1,55 @@
 class Restaurante:
-    nome: str
-    categoria: str
-    estado: str
+    _nome: str
+    _categoria: str
+    _estado: bool
     restaurantes_cadastrados = []
     
     
-    def __init__(self, nome, categoria, estado):
-        self.nome = nome
-        self.categoria = categoria
-        self.estado = estado
+    def __init__(self, nome, categoria):
+        self._nome = nome.title()
+        self._categoria = categoria.title()
+        self._estado = False
     
     
-    def get_dict_info(self):
-        return {key: value for key, value in vars(self).items() if key != 'estado'}
+    def to_dict(self):
+        return {'nome': self.nome, 'categoria': self.categoria, 'estado': self.estado}
     
     
-    def get_dict_all(self):
-        return vars(self)
+    @property
+    def nome(self):
+        return self._nome
     
     
-    def is_activated(self):
-        return True if self.estado == 'Ativado' else False
+    @nome.setter
+    def nome(self, novo_nome):
+        self._nome = novo_nome.title()
     
     
-    def mudar_estado(self):
-        self.estado = 'Desativado' if self.is_activated() else 'Ativado'
+    @property
+    def categoria(self):
+        return self._categoria
+    
+    
+    @categoria.setter
+    def categoria(self, nova_categoria):
+        self._categoria = nova_categoria.title()
+    
+
+    @property
+    def estado(self):
+        return 'Ativado' if self._estado else 'Desativado'
+    
+    
+    def atualizar_estado(self):
+        self._estado = not self._estado
+        return self._estado
+
+   
+    def listar_informacoes(self):
+        informacoes = self.to_dict()
+        informacoes.pop('estado')
+        for indice, (key, value) in enumerate(informacoes.items(), start=1):
+            print(f'{indice}. {key.title()}: {value}')
     
     
     @classmethod
@@ -32,17 +57,15 @@ class Restaurante:
         restaurantes = cls.retornar_lista()
         if restaurantes:
             for indice, restaurante in enumerate(restaurantes, start=1):
-                print(f'''{indice}. {restaurante['nome']}
-       Categoria: {restaurante['categoria']}
-       Estado: {restaurante['estado']}
-    {'-' * 50}''')
+                restaurante = restaurante.to_dict()
+                print(f'{indice}. {restaurante['nome']}')
+                restaurante_copia = restaurante.copy()
+                restaurante_copia.pop('nome')
+                for key, value in restaurante_copia.items():
+                    print(f'{key.title()}: {value}')
+            print('-' * 50)
         else:
             print('Não há restaurantes cadastrados no sistema.')
-            
-            
-    @classmethod
-    def atualizar_estado(cls, escolha, novo_estado):
-        cls.restaurantes_cadastrados[escolha - 1]['estado'] = novo_estado
     
     
     @classmethod
@@ -51,6 +74,13 @@ class Restaurante:
     
     
     @classmethod
+    def restaurante_existente(cls, nome):
+        return any(restaurante.nome.upper() == nome.upper() 
+                   for restaurante 
+                   in cls.restaurantes_cadastrados) if cls.restaurantes_cadastrados else False
+    
+    
+    @classmethod
     def adicionar(cls, restaurante):
-        cls.restaurantes_cadastrados.append(restaurante.get_dict_all())
+        cls.restaurantes_cadastrados.append(restaurante)
  

@@ -5,17 +5,19 @@ from classes import Restaurante
 
 def main():
     limpar_console()
-    while True:
-        titulo('Sabor Express')
-        resposta_do_usuario = menu_de_opcoes('Selecione uma opção', 'Cadastrar restaurante', 'Listar restaurante', 'Ativar restaurante', 'Sair')
-        if resposta_do_usuario == 1:
-            cadastrar_restaurante()
-        elif resposta_do_usuario == 2:
-            lista_de_restaurantes()
-        elif resposta_do_usuario == 3:
-            alternar_estado_restaurante()
-        elif resposta_do_usuario == 4:
-            finalizar_programa()
+    print(Restaurante.restaurantes_cadastrados)
+    titulo('Sabor Express')
+    resposta_do_usuario = menu_de_opcoes('Selecione uma opção', 'Cadastrar restaurante', 'Listar restaurante', 'Ativar restaurante', 'Sair')
+    if resposta_do_usuario == 1:
+        cadastrar_restaurante()
+    elif resposta_do_usuario == 2:
+        lista_de_restaurantes()
+    elif resposta_do_usuario == 3:
+        alternar_estado_restaurante()
+    elif resposta_do_usuario == 4:
+        finalizar_programa()
+    else:
+        main()
 
 
 def titulo(mensagem, linha='-', quantidade_de_espacos=50):
@@ -24,8 +26,8 @@ def titulo(mensagem, linha='-', quantidade_de_espacos=50):
     print(linha * quantidade_de_espacos)
 
 
-def input_continuar(msg=''):
-    print(msg) if msg != '' else None
+def input_continuar(mensagem=''):
+    print(mensagem) if mensagem != '' else None
     input('\nAperte "Enter" para continuar.\n')
 
 
@@ -70,7 +72,7 @@ def cadastrar_restaurante():
     def pergunta_informacoes():
         while True:
             subtitulo(msg_subtitulo)
-            listar_informacoes()
+            restaurante.listar_informacoes()
             pergunta = input('\nDeseja atualizar alguma informação [S/N]? ').strip().upper()
             if pergunta not in ('S', 'N'):
                 input_continuar('Por favor, digite apenas S ou N.')
@@ -96,15 +98,12 @@ def cadastrar_restaurante():
         while True:
             subtitulo(msg_subtitulo)
             numero_informacao = menu_de_opcoes('Digite o número da informação a ser alterada', 'Nome', 'Categoria')
-            if numero_informacao == 1:
-                atualizar_nome()
-            elif numero_informacao == 2:
-                atualizar_categoria()
-    
-    
-    def listar_informacoes():
-        for indice, (key, value) in enumerate(restaurante.get_dict_info().items(), start=1):
-            print(f'{indice}. {key.title()}: {value} ')
+            if numero_informacao:
+                if numero_informacao == 1:
+                    atualizar_nome()
+                elif numero_informacao == 2:
+                    atualizar_categoria()
+                break
   
 
     def cadastrar_nome_do_restaurante():
@@ -114,13 +113,8 @@ def cadastrar_restaurante():
             if not nome:
                 input_continuar('Por favor, não deixe o espaço em branco.')
             else:
-                if restaurantes:
-                    for restaurante in restaurantes:
-                        if nome.upper() == restaurante['nome'].upper():
-                            input_continuar('Restaurante já cadastrado no sistema. Tente novamente.')
-                            break
-                        elif restaurante == restaurantes[-1]:
-                            return nome
+                if Restaurante.restaurante_existente(nome):
+                    input_continuar('Restaurante já cadastrado no sistema.')
                 else:
                     return nome
                         
@@ -138,8 +132,7 @@ def cadastrar_restaurante():
     msg_subtitulo = 'Cadastrar restaurante'
     restaurantes = Restaurante.retornar_lista()
     restaurante = Restaurante(nome=cadastrar_nome_do_restaurante(), 
-                              categoria=cadastrar_categoria(), 
-                              estado='Desativado')
+                              categoria=cadastrar_categoria())
     while True:
         pergunta = pergunta_informacoes()
         if pergunta == 'S':
@@ -170,12 +163,8 @@ def alternar_estado_restaurante():
             if escolha.isdigit():
                 escolha = int(escolha)
                 if 1 <= escolha <= len(restaurantes):
-                    restaurante_escolhido = restaurantes[escolha - 1]
-                    restaurante = Restaurante(nome=restaurante_escolhido['nome'], 
-                                            categoria=restaurante_escolhido['categoria'], 
-                                            estado=restaurante_escolhido['estado'])
-                    restaurante.mudar_estado()
-                    Restaurante.atualizar_estado(escolha, restaurante.estado)
+                    restaurante = restaurantes[escolha - 1]
+                    restaurante.atualizar_estado()
                     input_continuar(f'Restaurante ({restaurante.nome}) {restaurante.estado.lower()} com sucesso.')
                     main()
                 else:
