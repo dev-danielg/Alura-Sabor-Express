@@ -2,6 +2,7 @@ class Restaurante:
     _nome: str
     _categoria: str
     _estado: bool
+    _avaliacoes: list
     restaurantes_cadastrados = []
     
     
@@ -9,10 +10,14 @@ class Restaurante:
         self._nome = nome.title()
         self._categoria = categoria.title()
         self._estado = False
+        self._avaliacoes = []
     
     
     def to_dict(self):
-        return {'nome': self.nome, 'categoria': self.categoria, 'estado': self.estado}
+        return {'nome': self.nome, 
+                'categoria': self.categoria, 
+                'estado': self.estado, 
+                'avaliacao': self.avaliacao}
     
     
     @property
@@ -30,6 +35,16 @@ class Restaurante:
         return 'Ativado' if self._estado else 'Desativado'
     
     
+    @property
+    def avaliacao(self):
+        if self._avaliacoes:
+            soma = sum(avaliacao.nota for avaliacao in self._avaliacoes)
+            media = soma / len(self._avaliacoes)
+            return round(media, 1)
+        else:
+            return 0
+
+    
     @nome.setter
     def nome(self, novo_nome):
         self._nome = novo_nome.title()
@@ -38,7 +53,7 @@ class Restaurante:
     @categoria.setter
     def categoria(self, nova_categoria):
         self._categoria = nova_categoria.title()
-    
+        
 
     def atualizar_estado(self):
         self._estado = not self._estado
@@ -48,8 +63,13 @@ class Restaurante:
     def listar_informacoes(self):
         informacoes = self.to_dict()
         informacoes.pop('estado')
+        informacoes.pop('avaliacao')
         for indice, (key, value) in enumerate(informacoes.items(), start=1):
             print(f'{indice}. {key.title()}: {value}')
+    
+    
+    def receber_avaliacao(self, avaliacao):
+        self._avaliacoes.append(avaliacao)
     
     
     @classmethod
@@ -61,6 +81,8 @@ class Restaurante:
                 print(f'{indice}. {restaurante['nome']}')
                 restaurante.pop('nome')
                 for key, value in restaurante.items():
+                    if key == 'avaliacao':
+                        key = key.replace('avaliacao', 'avaliação')
                     print(f'{key.title()}: {value}')
             print('-' * 50)
         else:
@@ -83,4 +105,3 @@ class Restaurante:
     @classmethod
     def adicionar(cls, restaurante):
         cls.restaurantes_cadastrados.append(restaurante)
- 

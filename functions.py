@@ -1,6 +1,7 @@
 from os import system
 from time import sleep
 from modelos.restaurante import Restaurante
+from modelos.avaliacao import Avaliacao
 
 
 def main():
@@ -141,7 +142,23 @@ def cadastrar_restaurante():
             Restaurante.adicionar(restaurante)
             continuar(f'O cadastro do restaurante ({restaurante.nome}) foi concluido com sucesso.')
             main()
-            
+
+
+def cadastrar_avaliacao(restaurante):
+    
+    
+    def cadastrar_nota():
+        pass
+    
+    
+    def cadastrar_cliente():
+        pass
+    
+    
+    avaliacao = Avaliacao(cliente=cadastrar_cliente, nota=cadastrar_nota)
+    restaurante.receber_avaliacao(avaliacao)
+    
+
 
 def lista_de_restaurantes():
     msg_subtitulo = 'Lista de restaurantes'
