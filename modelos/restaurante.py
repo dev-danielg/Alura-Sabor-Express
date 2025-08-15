@@ -20,26 +20,26 @@ class Restaurante:
         return self._nome
     
     
-    @nome.setter
-    def nome(self, novo_nome):
-        self._nome = novo_nome.title()
-    
-    
     @property
     def categoria(self):
         return self._categoria
     
     
-    @categoria.setter
-    def categoria(self, nova_categoria):
-        self._categoria = nova_categoria.title()
-    
-
     @property
     def estado(self):
         return 'Ativado' if self._estado else 'Desativado'
     
     
+    @nome.setter
+    def nome(self, novo_nome):
+        self._nome = novo_nome.title()
+    
+
+    @categoria.setter
+    def categoria(self, nova_categoria):
+        self._categoria = nova_categoria.title()
+    
+
     def atualizar_estado(self):
         self._estado = not self._estado
         return self._estado

@@ -1,6 +1,6 @@
 from os import system
 from time import sleep
-from classes import Restaurante
+from modelos.restaurante import Restaurante
 
 
 def main():
@@ -25,7 +25,7 @@ def titulo(mensagem, linha='-', quantidade_de_espacos=50):
     print(linha * quantidade_de_espacos)
 
 
-def input_continuar(mensagem=''):
+def continuar(mensagem=''):
     print(mensagem) if mensagem != '' else None
     input('\nAperte "Enter" para continuar.\n')
 
@@ -41,9 +41,9 @@ def menu_de_opcoes(mensagem, *opcoes):
             limpar_console()
             return escolha
         else:
-            input_continuar(f'Escolha inválida. Digite um número inteiro entre 1 e {len(opcoes)}.')
+            continuar(f'Escolha inválida. Digite um número inteiro entre 1 e {len(opcoes)}.')
     else:
-        input_continuar('Por favor, digite um número inteiro válido.')
+        continuar('Por favor, digite um número inteiro válido.')
     limpar_console()
     return
 
@@ -74,7 +74,7 @@ def cadastrar_restaurante():
             restaurante.listar_informacoes()
             pergunta = input('\nDeseja atualizar alguma informação [S/N]? ').strip().upper()
             if pergunta not in ('S', 'N'):
-                input_continuar('Por favor, digite apenas S ou N.')
+                continuar('Por favor, digite apenas S ou N.')
             else:
                 return pergunta
 
@@ -84,13 +84,13 @@ def cadastrar_restaurante():
         
         def atualizar_nome():
             nome_novo = cadastrar_nome_do_restaurante()
-            input_continuar(f'Nome alterado de ({restaurante.nome}) para ({nome_novo}) com sucesso.')
+            continuar(f'Nome alterado de ({restaurante.nome}) para ({nome_novo}) com sucesso.')
             restaurante.nome = nome_novo
 
 
         def atualizar_categoria():
             categoria_nova = cadastrar_categoria()
-            input_continuar(f'Categoria alterada de ({restaurante.categoria}) para ({categoria_nova}) com sucesso.')
+            continuar(f'Categoria alterada de ({restaurante.categoria}) para ({categoria_nova}) com sucesso.')
             restaurante.categoria = categoria_nova
 
 
@@ -110,10 +110,10 @@ def cadastrar_restaurante():
             subtitulo(msg_subtitulo)
             nome = input('Digite o nome do restaurante que deseja cadastrar: ').strip()
             if not nome:
-                input_continuar('Por favor, não deixe o espaço em branco.')
+                continuar('Por favor, não deixe o espaço em branco.')
             else:
                 if Restaurante.restaurante_existente(nome):
-                    input_continuar('Restaurante já cadastrado no sistema.')
+                    continuar('Restaurante já cadastrado no sistema.')
                 else:
                     return nome
                         
@@ -123,7 +123,7 @@ def cadastrar_restaurante():
             subtitulo(msg_subtitulo)
             categoria = input('Digite a categoria do restaurante: ').strip()
             if not categoria:
-                input_continuar('Por favor, não deixe o espaço em branco.')
+                continuar('Por favor, não deixe o espaço em branco.')
             else:
                 return categoria
     
@@ -139,7 +139,7 @@ def cadastrar_restaurante():
         elif pergunta == 'N':
             subtitulo(msg_subtitulo)
             Restaurante.adicionar(restaurante)
-            input_continuar(f'O cadastro do restaurante ({restaurante.nome}) foi concluido com sucesso.')
+            continuar(f'O cadastro do restaurante ({restaurante.nome}) foi concluido com sucesso.')
             main()
             
 
@@ -147,7 +147,7 @@ def lista_de_restaurantes():
     msg_subtitulo = 'Lista de restaurantes'
     subtitulo(msg_subtitulo)
     Restaurante.listar_restaurantes()
-    input_continuar()
+    continuar()
     main()
 
 
@@ -164,12 +164,12 @@ def alternar_estado_restaurante():
                 if 1 <= escolha <= len(restaurantes):
                     restaurante = restaurantes[escolha - 1]
                     restaurante.atualizar_estado()
-                    input_continuar(f'Restaurante ({restaurante.nome}) {restaurante.estado.lower()} com sucesso.')
+                    continuar(f'Restaurante ({restaurante.nome}) {restaurante.estado.lower()} com sucesso.')
                     main()
                 else:
-                    input_continuar(f'Por favor, digite um número inteiro entre 1 e {len(restaurantes)}')
+                    continuar(f'Por favor, digite um número inteiro entre 1 e {len(restaurantes)}')
             else:
-                input_continuar('Por favor, digite um número inteiro válido.')
+                continuar('Por favor, digite um número inteiro válido.')
         else:
-            input_continuar()
+            continuar()
             main()
