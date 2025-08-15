@@ -5,7 +5,6 @@ from classes import Restaurante
 
 def main():
     limpar_console()
-    print(Restaurante.restaurantes_cadastrados)
     titulo('Sabor Express')
     resposta_do_usuario = menu_de_opcoes('Selecione uma opção', 'Cadastrar restaurante', 'Listar restaurante', 'Ativar restaurante', 'Sair')
     if resposta_do_usuario == 1:

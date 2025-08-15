@@ -59,9 +59,8 @@ class Restaurante:
             for indice, restaurante in enumerate(restaurantes, start=1):
                 restaurante = restaurante.to_dict()
                 print(f'{indice}. {restaurante['nome']}')
-                restaurante_copia = restaurante.copy()
-                restaurante_copia.pop('nome')
-                for key, value in restaurante_copia.items():
+                restaurante.pop('nome')
+                for key, value in restaurante.items():
                     print(f'{key.title()}: {value}')
             print('-' * 50)
         else:
@@ -75,9 +74,10 @@ class Restaurante:
     
     @classmethod
     def restaurante_existente(cls, nome):
-        return any(restaurante.nome.upper() == nome.upper() 
-                   for restaurante 
-                   in cls.restaurantes_cadastrados) if cls.restaurantes_cadastrados else False
+        if cls.restaurantes_cadastrados:
+            return any(restaurante.nome.upper() == nome.upper() for restaurante in cls.restaurantes_cadastrados)
+        else:
+            return False
     
     
     @classmethod
