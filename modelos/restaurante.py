@@ -39,8 +39,8 @@ class Restaurante:
     def avaliacao(self):
         if self._avaliacoes:
             soma = sum(avaliacao.nota for avaliacao in self._avaliacoes)
-            media = soma / len(self._avaliacoes)
-            return round(media, 1)
+            media = round(soma / len(self._avaliacoes), 1)
+            return media
         else:
             return 0
 
@@ -75,8 +75,8 @@ Categoria: {self.categoria}''')
         if restaurantes:
             print(f'{'NOME'.ljust(25)} | {'CATEGORIA'.ljust(ajuste)} | {'AVALIAÇÃO'.ljust(ajuste)} | ESTADO')
             print('-' * espaco)
-            for restaurante in restaurantes:
-                print(f'{restaurante.nome.ljust(ajuste)} | {restaurante.categoria.ljust(ajuste)} | {str(restaurante.avaliacao).ljust(ajuste)} | {restaurante.estado}')
+            for indice, restaurante in enumerate(restaurantes, start=1):
+                print(f'{f'{indice}. {restaurante.nome}'.ljust(25)} | {restaurante.categoria.ljust(ajuste)} | {str(restaurante.avaliacao).ljust(ajuste)} | {restaurante.estado}')
         else:
             print('Não há restaurantes cadastrados no sistema.')
     
