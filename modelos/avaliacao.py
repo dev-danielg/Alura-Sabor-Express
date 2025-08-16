@@ -30,6 +30,7 @@ class Avaliacao:
     
     @nota.setter
     def nota(self, nova_nota):
-        if 0 <= nova_nota <= 10:
-            self._nota = nova_nota
+        self._nota = nova_nota
+        
+
         

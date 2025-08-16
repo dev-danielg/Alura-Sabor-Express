@@ -61,11 +61,8 @@ class Restaurante:
 
    
     def listar_informacoes(self):
-        informacoes = self.to_dict()
-        informacoes.pop('estado')
-        informacoes.pop('avaliacao')
-        for indice, (key, value) in enumerate(informacoes.items(), start=1):
-            print(f'{indice}. {key.title()}: {value}')
+        print(f'''Nome: {self.nome}
+Categoria: {self.categoria}''')
     
     
     def receber_avaliacao(self, avaliacao):
@@ -73,18 +70,13 @@ class Restaurante:
     
     
     @classmethod
-    def listar_restaurantes(cls):
+    def listar_restaurantes(cls, espaco=100, ajuste=25):
         restaurantes = cls.retornar_lista()
         if restaurantes:
-            for indice, restaurante in enumerate(restaurantes, start=1):
-                restaurante = restaurante.to_dict()
-                print(f'{indice}. {restaurante['nome']}')
-                restaurante.pop('nome')
-                for key, value in restaurante.items():
-                    if key == 'avaliacao':
-                        key = key.replace('avaliacao', 'avaliação')
-                    print(f'{key.title()}: {value}')
-            print('-' * 50)
+            print(f'{'NOME'.ljust(25)} | {'CATEGORIA'.ljust(ajuste)} | {'AVALIAÇÃO'.ljust(ajuste)} | ESTADO')
+            print('-' * espaco)
+            for restaurante in restaurantes:
+                print(f'{restaurante.nome.ljust(ajuste)} | {restaurante.categoria.ljust(ajuste)} | {str(restaurante.avaliacao).ljust(ajuste)} | {restaurante.estado}')
         else:
             print('Não há restaurantes cadastrados no sistema.')
     
