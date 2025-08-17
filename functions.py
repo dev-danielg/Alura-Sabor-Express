@@ -7,7 +7,7 @@ from modelos.avaliacao import Avaliacao
 def main():
     limpar_console()
     titulo('Sabor Express')
-    resposta_do_usuario = menu_de_opcoes('Selecione uma opção', ['Cadastrar restaurante', 'Listar restaurante', 'Ativar restaurante', 'Avaliar restaurante', 'Sair'], mostrar_opcoes=True, opcao_menu_principal=False)
+    resposta_do_usuario = menu_de_opcoes('Selecione uma opção', ['Cadastrar restaurante', 'Listar restaurante', 'Ativar restaurante', 'Avaliar restaurante', 'Sair'], mostrar_opcoes=True, menu_principal=True)
     if resposta_do_usuario:
         if resposta_do_usuario == 1:
             cadastrar_restaurante()
@@ -44,15 +44,15 @@ def voltar_ao_menu():
 def input_menu(mensagem):
     while True:
         resposta_do_usuario = input(f'{mensagem} (0 para voltar ao menu principal)\n').strip()
-        if resposta_do_usuario == '0':
+        if resposta_do_usuario == 0:
             voltar_ao_menu()
-        elif possui_espaco_em_branco(resposta_do_usuario):
-            continue
-        return resposta_do_usuario
+        else:
+            return resposta_do_usuario
+            
     
 
-def menu_de_opcoes(mensagem, opcoes: list, mostrar_opcoes=True, opcao_menu_principal=True):
-    print(f'{mensagem} (0 para voltar ao menu principal)' if opcao_menu_principal else mensagem)
+def menu_de_opcoes(mensagem, opcoes: list, mostrar_opcoes=True, menu_principal=False):
+    print(f'{mensagem} (0 para voltar ao menu principal)' if not menu_principal else mensagem)
     if mostrar_opcoes:
         for indice, opcao in enumerate(opcoes, start=1):
             print(f'[{indice}] {opcao}')
@@ -62,10 +62,11 @@ def menu_de_opcoes(mensagem, opcoes: list, mostrar_opcoes=True, opcao_menu_princ
         if 1 <= escolha <= len(opcoes):
             limpar_console()
             return escolha
-        elif escolha == 0 and opcao_menu_principal:
+        elif escolha == 0 and menu_principal:
             voltar_ao_menu()
         else:
-            enter_continuar(f'Escolha inválida. Digite um número inteiro entre 1 e {len(opcoes)}.')
+            frase_opcao = 'o número inteiro 1' if len(opcoes) == 1 else f'um número inteiro entre 1 e {len(opcoes)}'
+            enter_continuar(f'Escolha inválida. Digite {frase_opcao}.')
     else:
         enter_continuar('Por favor, digite um número inteiro válido.')
     limpar_console()
@@ -94,8 +95,8 @@ def atualizar_informacao(tipo_info, info_antiga, funcao):
     return info_nova
 
 
-def possui_espaco_em_branco(escolha):
-    if not escolha:
+def possui_espaco_em_branco(resposta_do_usuario):
+    if not resposta_do_usuario:
         enter_continuar('Por favor, não deixe o espaço em branco.')
         return True
     else:
@@ -111,10 +112,10 @@ def cadastrar_restaurante():
             resposta_do_usuario = menu_de_opcoes('Digite o número da informação a ser alterada', ['Nome', 'Categoria'])
             if resposta_do_usuario:
                 if resposta_do_usuario == 1:
-                    info_nova = atualizar_informacao('nome', restaurante.nome, cadastrar_nome_do_restaurante)
+                    info_nova = atualizar_informacao('nome', restaurante.nome, cadastrar_nome_restaurante)
                     restaurante.nome = info_nova
                 elif resposta_do_usuario == 2:
-                    info_nova = atualizar_informacao('categoria', restaurante.categoria, cadastrar_categoria)
+                    info_nova = atualizar_informacao('categoria', restaurante.categoria, cadastrar_categoria_restaurante)
                     restaurante.categoria = info_nova
                 return
             else:
@@ -127,7 +128,7 @@ def cadastrar_restaurante():
         enter_continuar(f'O cadastro do restaurante {restaurante.nome} foi concluido com sucesso.')
 
 
-    def cadastrar_nome_do_restaurante():
+    def cadastrar_nome_restaurante():
         while True:
             subtitulo(msg_subtitulo)
             nome = input_menu('Digite o nome do restaurante que deseja cadastrar')
@@ -137,7 +138,7 @@ def cadastrar_restaurante():
                 return nome
                         
 
-    def cadastrar_categoria():
+    def cadastrar_categoria_restaurante():
         while True:
             subtitulo(msg_subtitulo)
             categoria = input_menu('Digite a categoria do restaurante')
@@ -146,8 +147,8 @@ def cadastrar_restaurante():
     
     msg_subtitulo = 'Cadastrar restaurante'
     restaurantes = Restaurante.retornar_lista()
-    restaurante = Restaurante(nome=cadastrar_nome_do_restaurante(), 
-                              categoria=cadastrar_categoria())
+    restaurante = Restaurante(nome=cadastrar_nome_restaurante(), 
+                              categoria=cadastrar_categoria_restaurante())
     while True:
         subtitulo(msg_subtitulo)
         restaurante.listar_informacoes()
@@ -165,20 +166,75 @@ def cadastrar_restaurante():
 def cadastrar_avaliacao():
     
     
-    def cadastrar_nota():
-        pass
+    def cadastrar_nota_avaliacao():
+        while True:
+            subtitulo(msg_subtitulo)
+            nota = input_menu('Digite uma nota de 1 a 5 para o restaurante')
+            if nota.isdigit():
+                nota = int(nota)
+                if 1 <= nota <= 5:
+                    return nota
+                else:
+                    enter_continuar('Por favor, digite um número inteiro entre 1 e 5.')
+            else:
+                enter_continuar('Por favor, digite um número inteiro válido')
     
     
-    def cadastrar_cliente():
-        pass
+    def cadastrar_cliente_avaliacao():
+        while True:
+            subtitulo(msg_subtitulo)
+            cliente = input_menu('Digite o nome que deseja atribuir à sua avaliação')
+            return cliente
+    
+    
+    def atualizar_avaliacao():
+        while True:
+            subtitulo(msg_subtitulo)
+            resposta_do_usuario = menu_de_opcoes('Deseja atualizar qual informação?', ['Seu nome', 'Nota'])
+            if resposta_do_usuario:
+                if resposta_do_usuario == 1:
+                    info_nova = atualizar_informacao('nome', avaliacao.cliente, cadastrar_cliente_avaliacao)
+                    avaliacao.cliente = info_nova
+                elif resposta_do_usuario == 2:
+                    info_nova = atualizar_informacao('nota', avaliacao.nota, cadastrar_nota_avaliacao)
+                    avaliacao.nota = info_nova
+                return
+            else:
+                continue
+        
+    
+    def adicionar_avaliacao():
+        subtitulo(msg_subtitulo)
+        restaurante.receber_avaliacao(avaliacao)
+        enter_continuar(f'Avaliação de {avaliacao.nota} estrelas aplicada ao restaurante {restaurante.nome} com sucesso.')
     
     
     msg_subtitulo = 'Avaliar restaurante'
-    subtitulo(msg_subtitulo)
     restaurantes = Restaurante.retornar_lista()
-    avaliacao = Avaliacao(cliente=cadastrar_cliente(), nota=cadastrar_nota())
-        
-        
+    while True:
+        subtitulo(msg_subtitulo)
+        Restaurante.listar_restaurantes()
+        if restaurantes:
+            resposta_do_usuario = menu_de_opcoes('\nDigite o número do restaurante que deseja avaliar', restaurantes, mostrar_opcoes=False) 
+            if resposta_do_usuario:
+                restaurante = restaurantes[resposta_do_usuario - 1]
+                avaliacao = Avaliacao(cliente=cadastrar_cliente_avaliacao(), 
+                                      nota=cadastrar_nota_avaliacao())
+                subtitulo(msg_subtitulo)
+                avaliacao.listar_informacoes()
+                resposta_do_usuario = menu_de_opcoes('\nDeseja atualizar alguma informação?', ['Sim', 'Não'])
+                if resposta_do_usuario == 1:
+                    atualizar_avaliacao()
+                elif resposta_do_usuario == 2:
+                    adicionar_avaliacao()
+                    main()
+            else:
+                continue
+        else:
+            enter_continuar()
+            main()
+
+
 def lista_de_restaurantes():
     msg_subtitulo = 'Lista de restaurantes'
     subtitulo(msg_subtitulo)

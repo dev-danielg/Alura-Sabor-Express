@@ -42,7 +42,7 @@ class Restaurante:
             media = round(soma / len(self._avaliacoes), 1)
             return media
         else:
-            return 0
+            return '-'
 
     
     @nome.setter
@@ -53,11 +53,10 @@ class Restaurante:
     @categoria.setter
     def categoria(self, nova_categoria):
         self._categoria = nova_categoria.title()
-        
+    
 
     def atualizar_estado(self):
         self._estado = not self._estado
-        return self._estado
 
    
     def listar_informacoes(self):

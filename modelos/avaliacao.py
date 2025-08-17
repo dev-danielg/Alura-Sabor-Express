@@ -31,6 +31,11 @@ class Avaliacao:
     @nota.setter
     def nota(self, nova_nota):
         self._nota = nova_nota
+    
+    
+    def listar_informacoes(self):
+        print(f'''Nome: {self.cliente}
+Avaliação: {self.nota}''')
         
 
         
