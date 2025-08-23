@@ -2,8 +2,9 @@ class Restaurante:
     _nome: str
     _categoria: str
     _estado: bool
-    _avaliacoes: list
-    restaurantes_cadastrados = []
+    _avaliacoes: list 
+    _cardapio: list
+    _restaurantes_cadastrados: list = []
     
     
     def __init__(self, nome, categoria):
@@ -11,6 +12,7 @@ class Restaurante:
         self._categoria = categoria.title()
         self._estado = False
         self._avaliacoes = []
+        self._cardapio = []
     
     
     def to_dict(self):
@@ -82,17 +84,17 @@ Categoria: {self.categoria}''')
     
     @classmethod
     def retornar_lista(cls):
-        return cls.restaurantes_cadastrados
+        return cls._restaurantes_cadastrados
     
     
     @classmethod
     def restaurante_existente(cls, nome):
-        if cls.restaurantes_cadastrados:
-            return any(restaurante.nome.upper() == nome.upper() for restaurante in cls.restaurantes_cadastrados)
+        if cls._restaurantes_cadastrados:
+            return any(restaurante.nome.upper() == nome.upper() for restaurante in cls._restaurantes_cadastrados)
         else:
             return False
     
     
     @classmethod
     def adicionar(cls, restaurante):
-        cls.restaurantes_cadastrados.append(restaurante)
+        cls._restaurantes_cadastrados.append(restaurante)

@@ -44,7 +44,7 @@ def voltar_ao_menu():
 def input_menu(mensagem):
     while True:
         resposta_do_usuario = input(f'{mensagem} (0 para voltar ao menu principal)\n').strip()
-        if resposta_do_usuario == 0:
+        if resposta_do_usuario == '0':
             voltar_ao_menu()
         else:
             return resposta_do_usuario
@@ -62,7 +62,7 @@ def menu_de_opcoes(mensagem, opcoes: list, mostrar_opcoes=True, menu_principal=F
         if 1 <= escolha <= len(opcoes):
             limpar_console()
             return escolha
-        elif escolha == 0 and menu_principal:
+        elif escolha == 0 and not menu_principal:
             voltar_ao_menu()
         else:
             frase_opcao = 'o número inteiro 1' if len(opcoes) == 1 else f'um número inteiro entre 1 e {len(opcoes)}'
@@ -261,4 +261,3 @@ def alternar_estado_restaurante():
         else:
             enter_continuar()
             main()
-
